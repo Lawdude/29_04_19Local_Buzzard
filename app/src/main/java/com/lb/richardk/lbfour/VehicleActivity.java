@@ -1,6 +1,7 @@
 package com.lb.richardk.lbfour;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
@@ -9,11 +10,15 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class VehicleActivity extends AppCompatActivity {
 
@@ -26,6 +31,10 @@ public class VehicleActivity extends AppCompatActivity {
     //public EditText make;
     //public EditText colour;
     public EditText city;
+    private TextView error;
+
+    public String reg, cit, uid;
+    public NewCar newCar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +46,7 @@ public class VehicleActivity extends AppCompatActivity {
         //model = (EditText) findViewById(R.id.ViewModeleditText2);
         //colour = (EditText) findViewById(R.id.ViewColoureditText2);
         city = (EditText) findViewById(R.id.ViewCityeditText);
+        error = (TextView)findViewById(R.id.errorText);
 
         vRegistration.addTextChangedListener(new TextWatcher() {
             @Override
@@ -91,23 +101,42 @@ public class VehicleActivity extends AppCompatActivity {
                 }
                 else
                 {
-                    Intent startIntent = new Intent(getApplicationContext(), HomeActivity.class);
-                    startActivity(startIntent);
-
-                    String reg = vRegistration.getText().toString();
+                    reg = vRegistration.getText().toString();
                     //String mod = model.getText().toString();
                     //String mk = make.getText().toString();
                     //String col = colour.getText().toString();
-                    String cit = city.getText().toString();
+                    cit = city.getText().toString();
 
                     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
-                    String uid = user.getUid();
+                    uid = user.getUid();
 
-                    NewCar newCar = new NewCar(reg, cit);
+                    newCar = new NewCar(reg, cit);
 
-                    myRef.child(uid).push().setValue(newCar);
-                    myRegRef.child(reg).child("uid").setValue(uid);
+                    DatabaseReference car = FirebaseDatabase.getInstance().getReference("Registration/"+reg);
+                    car.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            if(dataSnapshot.getChildrenCount() == 0)
+                            {
+                                myRef.child(uid).push().setValue(newCar);
+                                myRegRef.child(reg).child("uid").setValue(uid);
+
+                                Intent startIntent = new Intent(getApplicationContext(), HomeActivity.class);
+                                startActivity(startIntent);
+                            }
+                            else
+                            {
+                                error.setTextColor(Color.RED);
+                                error.setText("This registration is already in use. Please contact support for help");
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+                            // Do something about the error
+                        }
+                    });
                 }
             }
         });

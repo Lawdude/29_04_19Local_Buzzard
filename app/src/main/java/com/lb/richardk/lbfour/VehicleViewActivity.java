@@ -77,7 +77,7 @@ public class VehicleViewActivity extends AppCompatActivity {
                 final String carReg = model.getVehicleReg();
 
                 viewHolder.setVehicleReg(model.getVehicleReg());
-                viewHolder.setModel(model.getModel());
+                viewHolder.setCity(model.getCity());
 
                 viewHolder.deleteBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -114,9 +114,9 @@ public class VehicleViewActivity extends AppCompatActivity {
             carReg.setText(reg);
         }
 
-        public void setModel(String mod) {
-            TextView message = (TextView) mView.findViewById(R.id.model);
-            message.setText(mod);
+        public void setCity(String cit) {
+            TextView message = (TextView) mView.findViewById(R.id.city);
+            message.setText(cit);
         }
     }
 }

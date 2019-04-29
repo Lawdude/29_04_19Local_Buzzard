@@ -98,7 +98,7 @@ public class AddVehicleActivity extends AppCompatActivity {
                 newCar.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        if(dataSnapshot.getChildrenCount() > 0)
+                        if(dataSnapshot.getChildrenCount() == 0)
                         {
                             myRef.child(uid).push().setValue(car);
                             myRegRef.child(vReg).child("uid").setValue(uid);
@@ -109,7 +109,7 @@ public class AddVehicleActivity extends AppCompatActivity {
                         else
                         {
                             error.setTextColor(Color.RED);
-                            error.setText("Your email or password is incorrect");
+                            error.setText("This registration is already in use. Please contact support for help");
                         }
                     }
 

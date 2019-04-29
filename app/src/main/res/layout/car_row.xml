@@ -23,7 +23,7 @@
             android:textSize="20dp" />
 
         <TextView
-            android:id="@+id/model"
+            android:id="@+id/city"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Alert Message"

@@ -10,26 +10,26 @@ public class UserCar
     public String colour;
     public String make;
     public String model;
-    public String borough;
+    public String city;
 
     public UserCar() {
         // Default constructor required for calls to DataSnapshot.getValue(User.class)
     }
 
-    public UserCar(String vReg, String col, String make, String mod, String bor) {
+    public UserCar(String vReg, String col, String make, String mod, String cit) {
         this.vehicleReg = vReg;
         this.colour = col;
         this.make = make;
         this.model = mod;
-        this.borough = bor;
+        this.city = cit;
     }
 
-    public String getBorough() {
-        return borough;
+    public String getCity() {
+        return city;
     }
 
-    public void setBorough(String bor) {
-        this.borough = bor;
+    public void setCity(String cit) {
+        this.city = cit;
     }
 
     public String getColour() {
