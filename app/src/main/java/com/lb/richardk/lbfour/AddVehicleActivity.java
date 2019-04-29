@@ -39,6 +39,8 @@ public class AddVehicleActivity extends AppCompatActivity {
 
     public Car car;
 
+    public long registrations;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,6 +100,7 @@ public class AddVehicleActivity extends AppCompatActivity {
                 newCar.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
+                        registrations = dataSnapshot.getChildrenCount();
                         if(dataSnapshot.getChildrenCount() == 0)
                         {
                             myRef.child(uid).push().setValue(car);
@@ -106,11 +109,6 @@ public class AddVehicleActivity extends AppCompatActivity {
                             Intent startIntent = new Intent(getApplicationContext(), VehicleViewActivity.class);
                             startActivity(startIntent);
                         }
-                        else
-                        {
-                            error.setTextColor(Color.RED);
-                            error.setText("This registration is already in use. Please contact support for help");
-                        }
                     }
 
                     @Override
@@ -118,6 +116,12 @@ public class AddVehicleActivity extends AppCompatActivity {
                         // Do something about the error
                     }
                 });
+
+                if(registrations > 0)
+                {
+                    error.setTextColor(Color.RED);
+                    error.setText("This registration is already in use. Please contact support for help");
+                }
             }
         });
     }
